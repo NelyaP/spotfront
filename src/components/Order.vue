@@ -1,15 +1,18 @@
 <template>
   <div class="order-form">
     <v-card class="px-2">
-      <v-card-title>New order</v-card-title>
+      <v-card-title>Order bag: {{product.name}}</v-card-title>
       <v-form>
         <v-container fluid>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="5">
               <v-text-field label="Name" readonly :value="product.name" outlined></v-text-field>
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="3">
               <v-text-field label="Producer" readonly :value="product.producer_name" outlined></v-text-field>
+            </v-col>
+            <v-col cols="12" md="2">
+              <v-text-field label="Price($)" readonly :value="product.price" outlined></v-text-field>
             </v-col>
             <v-col cols="12" md="2">
               <v-text-field v-model="amount" label="Amount" outlined></v-text-field>
@@ -37,11 +40,8 @@ export default {
   props: ['product'],
   data() {
     return {
-      amount: 0
+      amount: 1
     };
-  },
-  computed: {
-    //...mapGetters(['getProducts']),
   },
   methods: {
     ...mapActions(['postOrder']),

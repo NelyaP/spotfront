@@ -35,13 +35,15 @@ export default {
     }
   },
   created() {
+    this.fetchProducers();
+    this.fetchProducts();
     this.fetchOrders();
   },
   computed: {
     ...mapGetters(['getOrders']),
   },
   methods: {
-    ...mapActions(['fetchOrders']),
+    ...mapActions(['fetchProducers', 'fetchProducts', 'fetchOrders']),
   }
 };
 </script>

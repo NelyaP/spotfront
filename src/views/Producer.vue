@@ -11,7 +11,6 @@
                         <p class="ma-2">{{getProducer.description}}</p>
                     </v-col>
                 </v-row>
-                
             </v-col>
             <v-col cols="12">
                 <p class="headline">Products</p>
@@ -82,7 +81,6 @@ export default {
     },
     computed: {
         ...mapGetters(['getProducer']),
-        
     },
     methods: {
         ...mapActions(['fetchProducer']),
@@ -91,6 +89,6 @@ export default {
         id (n, o) {
             n ? fetchProducer(this.id): null
         }
-    }
+    },
 }
 </script>

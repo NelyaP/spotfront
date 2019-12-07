@@ -22,15 +22,15 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn outlined color="indigo" @click.prevent="dialog = !dialog">Order</v-btn>
+              <v-btn outlined color="indigo" @click.prevent="dialog = !dialog; current = product">Order</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
     <div class="text-center">
-      <v-dialog v-model="dialog" width="800">
-        <Order />
+      <v-dialog persistent v-model="dialog" width="800">
+        <Order :product="current" @cancel="dialog = false" @submit="dialog = false"/>
       </v-dialog>
     </div>
   </div>
@@ -46,7 +46,8 @@ export default {
   },
   data() {
     return {
-      dialog: false
+      dialog: false,
+      current: null
     };
   },
   created() {

@@ -114,8 +114,23 @@ export default new Vuex.Store({
             return response.data;
           })
           .catch(error => console.log(error)); 
-      } 
-      
+      }
+    },
+    postOrder({ commit, state }, payload) {
+      if (payload) {
+        var url = state.apiUrl + '/orders/'
+        return axios.post(url, payload)
+        .then(response => {
+          commit('pushOrder', response.data);
+          return response.data
+        })
+        .catch(err => {
+            return 'err' 
+        })
+      }
+			var path = '/article';
+			var url = state.apiUrl + path;
+			
     },
   },
   mutations: {
@@ -123,5 +138,6 @@ export default new Vuex.Store({
     setProducts(state, products) { state.products = products; },
     setOrders(state, orders) { state.orders = orders; },
     setProducer(state, producer) { state.producer = producer; },
+    pushOrder(state, order) { state.orderd.push(order) ; },
   }
 })

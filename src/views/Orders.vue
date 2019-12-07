@@ -14,9 +14,9 @@
       <tbody>
         <tr v-for="order in orders" :key="order.id">
           <td>{{ order.id }}</td>
-          <td>{{ order.creation_date }}</td>
-          <td>{{ order.product }}</td>
-          <td>{{ order.producer }}</td>
+          <td>{{ order.crdt }}</td>
+          <td>{{ order.product_name }}</td>
+          <td>{{ order.producer_name }}</td>
           <td>{{ order.amount }}</td>
           <td>{{ order.status }}</td>
         </tr>
@@ -26,57 +26,30 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-          orders: [
-              {id: '1', creation_date: '15/02/2019 13:44', product: 'D1 FANNY PACK', producer: 'Wandrd', amount: '3', status: 'Ordered'},
-              {id: '2', creation_date: '24/02/2019 9:01', product: 'CYBERPUNK', producer: 'Superfirebags', amount: '1', status: 'Ordered'},
-          ],
+import { format } from "date-fns";
 
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-          },
-        ],
-      }
-    },
+export default {
+  data() {
+    return {
+      orders: []
+    };
+  },
+  created() {
+    this.getOrders();
+  },
+  methods: {
+    getOrders() {
+      axios
+      .get("http://localhost:8000/api/orders")
+      .then(response => {
+        var data = response.data.map(e => {
+            e.crdt = format(new Date(e.creation_date), 'dd-MMM-yyyy HH:mm:ss');
+            return e
+        })
+        this.orders = data;
+      })
+      .catch(error => console.log(error));
+    }
   }
+};
 </script>

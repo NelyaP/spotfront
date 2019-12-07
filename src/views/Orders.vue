@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="order in orders" :key="order.id">
+        <tr v-for="order in getOrders" :key="order.id">
           <td>{{ order.id }}</td>
           <td>{{ order.crdt }}</td>
           <td>{{ order.product_name }}</td>
@@ -26,30 +26,22 @@
 </template>
 
 <script>
-import { format } from "date-fns";
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
-      orders: []
-    };
+      // data
+    }
   },
   created() {
-    this.getOrders();
+    this.fetchOrders();
+  },
+  computed: {
+    ...mapGetters(['getOrders']),
   },
   methods: {
-    getOrders() {
-      axios
-      .get("http://localhost:8000/api/orders")
-      .then(response => {
-        var data = response.data.map(e => {
-            e.crdt = format(new Date(e.creation_date), 'dd-MMM-yyyy HH:mm:ss');
-            return e
-        })
-        this.orders = data;
-      })
-      .catch(error => console.log(error));
-    }
+    ...mapActions(['fetchOrders']),
   }
 };
 </script>

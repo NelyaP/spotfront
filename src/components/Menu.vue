@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data() {
     return {
@@ -31,7 +33,18 @@ export default {
         { to: "/orders", text: "Orders" },
         { to: "/about", text: "About us" }
         ]
-    };
-  }
+    }
+  },
+  created () {
+		this.fetchProducers();
+    this.fetchProducts();
+    this.fetchOrders();
+	},
+  computed: {
+    ...mapGetters(['getProducers', 'getProducts', 'getOrders']),
+  },
+  methods: {
+		...mapActions(['fetchProducers', 'fetchProducts', 'fetchOrders']),
+	}
 };
 </script>

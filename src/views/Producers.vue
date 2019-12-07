@@ -1,6 +1,6 @@
 <template>
   <div class="producers">
-    <v-card v-for="p in producers" :key="p.id" class="ma-2">
+    <v-card v-for="p in getProducers" :key="p.id" class="ma-2">
       <v-container fluid class="ma-2">
         <v-row no-gutters>
           <v-col cols="12" md="3">
@@ -39,24 +39,21 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data() {
     return {
-      producers: []
     };
   },
   created() {
-    this.getProducers();
+    this.fetchProducers()
+  },
+  computed: {
+    ...mapGetters(['getProducers']),
   },
   methods: {
-    getProducers() {
-      axios
-      .get("http://localhost:8000/api/producers")
-      .then(response => {
-        this.producers = response.data;
-      })
-      .catch(error => console.log(error));
-    }
+    ...mapActions(['fetchProducers']),
   }
 };
 </script>

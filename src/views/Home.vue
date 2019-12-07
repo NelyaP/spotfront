@@ -3,7 +3,7 @@
     <!---<img alt="Vue logo" src="../assets/logo.png">--->
     <v-container fluid>
       <v-row>
-        <v-col v-for="product in products" :key="product.id" cols="12" md="4">
+        <v-col v-for="product in getProducts" :key="product.id" cols="12" md="4">
           <v-card>
             <v-img
               :src="product.photo"
@@ -14,7 +14,7 @@
               <v-card-title v-text="product.name"></v-card-title>
               <p
                 class="caption mx-5 mb-1"
-              >{{ product.producer ? getProducerName(product.producer) : null }}</p>
+              >{{ product.producer_name }}</p>
             </v-img>
 
             <p class="ma-3 caption font-weight-light">{{ product.description }}</p>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Order from "@/components/Order.vue";
 
 export default {
@@ -45,37 +46,18 @@ export default {
   },
   data() {
     return {
-      products: [],
-      producers: [],
       dialog: false
     };
   },
   created() {
-    this.getProducers();
-    this.getProducts();
+    this.fetchProducers()
+    this.fetchProducts()
+  },
+  computed: {
+    ...mapGetters(['getProducts']),
   },
   methods: {
-    getProducts() {
-      axios
-      .get("http://localhost:8000/api/products")
-      .then(response => {
-        this.products = response.data;
-      })
-      .catch(error => console.log(error));
-    },
-    getProducers() {
-      axios
-      .get("http://localhost:8000/api/producers")
-      .then(response => {
-        this.producers = response.data;
-      })
-      .catch(error => console.log(error));
-    },
-    getProducerName(id) {
-      if (!this.producers) return undefined;
-      var out = this.producers.find(el => el.id === id);
-      return out.name;
-    }
+    ...mapActions(['fetchProducers', 'fetchProducts']),
   }
 };
 </script>

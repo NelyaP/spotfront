@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     apiUrl: 'http://localhost:8000/api',
+    producer: {},
     products: [],
     producers: [],
     orders: []
@@ -41,7 +42,34 @@ export default new Vuex.Store({
         return e
       })
       return data;
-    }
+    },
+    //getProducer: state => state.producer,
+    getProducer(state) {
+      var id = state.producer.id
+      var products = state.products.length > 0 ? state.products.filter(p => p.producer === id) : []
+      var pids = []
+      products.forEach(el => {
+        pids.push(el.id)
+      })
+      var orders = state.orders
+      var oels = []
+      orders.forEach(el => {
+        if (pids.includes(el.product)) {
+          oels.push(el)
+        }
+      })
+      return {
+        id: id,
+        name: state.producer.name,
+        description: state.producer.description,
+        rating: state.producer.rating,
+        phone: state.producer.phone,
+        url: state.producer.url,
+        logo: state.producer.logo,
+        products: products,
+        orders: oels
+      }
+    },
   },
   actions: {
     fetchProducers({ commit, state }) {
@@ -74,10 +102,26 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error));
     },
+    fetchProducer({ commit, state }, payload) {
+      console.log(payload)
+      if (payload) {
+        var url = state.apiUrl + '/producers/' + payload
+          axios
+          .get(url)
+          .then(response => {
+            commit('setProducer', response.data)
+            console.log(response.data)
+            return response.data;
+          })
+          .catch(error => console.log(error)); 
+      } 
+      
+    },
   },
   mutations: {
     setProducers(state, producers) { state.producers = producers; },
     setProducts(state, products) { state.products = products; },
     setOrders(state, orders) { state.orders = orders; },
+    setProducer(state, producer) { state.producer = producer; },
   }
 })
